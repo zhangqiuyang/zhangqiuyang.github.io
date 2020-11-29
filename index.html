@@ -93,7 +93,23 @@
 <li>Define and control policies that govern both physical and virtual networks</li>
 <li>Implement network policies consistently at scale</li>
 </ul>
-<p>网络控制器</p>
+<h2 id="SDN基本定义"><a href="#SDN基本定义" class="headerlink" title="SDN基本定义"></a>SDN基本定义</h2><p>   软件定义网络（SDN）提供了一种在数据中心中集中配置和管理物理和虚拟网络设备（例如路由器，交换机和网关）的方法。可以使用现有的SDN兼容设备在虚拟网络和物理网络之间实现更深层次的集成，基础结构的组成部分有Hyper-V虚拟交换机，Hyper-V网络虚拟化和RAS网关等虚拟网络组件。</p>
+<h2 id="Network-Controller"><a href="#Network-Controller" class="headerlink" title="Network Controller"></a>Network Controller</h2><p>   网络控制器提供了用于管理、配置、对数据中心的虚拟和物理网络进行监控及排障的一个集中管理的自动化编程点。使用网络控制器，可以自动配置网络基础结构，无需手动配置网络设备和服务。<br>网络控制器是高可用性、可伸缩的服务器，提供两个应用程序编程接口（APIs）:</p>
+<ol>
+<li>Southbound API –允许网络控制器与网络通信; </li>
+<li>Northbound API –允许与网络控制器进行通信。</li>
+</ol>
+<h2 id="Hyper-V-Network-Virtualization"><a href="#Hyper-V-Network-Virtualization" class="headerlink" title="Hyper-V Network Virtualization"></a>Hyper-V Network Virtualization</h2><p>   Hyper-V网络虚拟化（HNV）有助于使用虚拟网络从物理网络中提取应用程序和工作负载。在共享的物理网络结构上，虚拟网络提供必要的多租户隔离，从而提高了资源利用率。可以在现有网络设备上设置虚拟网络。虚拟网络与虚拟局域网（VLANs）兼容。</p>
+<h3 id="VLAN"><a href="#VLAN" class="headerlink" title="VLAN"></a>VLAN</h3><p>目前，VLAN是大多数组织用来支持地址空间重用和租户隔离的机制。VLAN在以太网帧头中使用显式标记（VLAN ID），并且依靠以太网交换机来实施隔离并将流量限流到具有相同VLAN ID的网络节点。VLAN的主要缺点如下：</p>
+<ol>
+<li>由于繁琐的生产交换机重新配置而导致意外中断的风险增加</li>
+<li>每当虚拟机或隔离边界在动态数据中心中移动时,可扩展性受到限制，因为最多有4094个VLAN，并且典型的交换机最多支持1000个VLAN ID。</li>
+<li>限制在单个IP子网内，这限制了单个VLAN中的节点数量，并根据物理位置限制了虚拟机的放置。即使VLAN可以跨站点扩展，但整个VLAN必须在同一子网中。<h3 id="IP地址分配"><a href="#IP地址分配" class="headerlink" title="IP地址分配"></a>IP地址分配</h3>除了VLAN所带来的缺点之外，虚拟机IP地址分配也带来了一些问题，其中包括：</li>
+<li>数据中心网络基础结构中的物理位置确定虚拟机IP地址。因此，迁移到云通常需要更改服务工作负载的IP地址。</li>
+<li>策略与IP地址相关联，例如防火墙规则，资源发现和目录服务等。更改IP地址需要更新所有关联的策略。</li>
+</ol>
+<p>虚拟机部署和流量隔离取决于拓扑。</p>
+<p>当数据中心网络管理员设计数据中心的物理布局时，他们必须决定子网的物理放置和路由位置。这些决策基于IP和以太网技术，这些技术会影响在给定服务器或连接到数据中心特定机架的刀片服务器上运行的虚拟机的潜在IP地址。在配置虚拟机并将其放置在数据中心中时，虚拟机必须遵守有关IP地址的这些选择和限制。因此，典型的结果是数据中心管理员为虚拟机分配了新的IP地址。<br>该要求的问题在于，除了作为地址之外，还存在与IP地址关联的语义信息。例如，一个子网可以包含给定的服务，也可以位于不同的物理位置。防火墙规则，访问控制策略和IPsec安全关联通常与IP地址关联。更改IP地址会强制虚拟机所有者根据原始IP地址调整其所有策略，以至于许多企业选择仅将新服务部署到云中，而将遗留应用程序留在原处。<br>Hyper-V网络虚拟化将客户虚拟机的虚拟网络与物理网络基础结构分离。它使客户虚拟机可以保留其原始IP地址，同时允许数据中心管理员在数据中心内的任何位置配置客户虚拟机，而无需重新配置物理IP地址或VLAN ID。<br>下一节总结了关键功能。</p>
 
       
     </div>

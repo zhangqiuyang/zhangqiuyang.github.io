@@ -64,6 +64,52 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-http-request" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/01/10/http-request/" class="article-date">
+  <time datetime="2021-01-10T14:16:55.000Z" itemprop="datePublished">2021-01-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/10/http-request/">http request</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>常用的请求方法里面GET请求和POST请求我们都非常熟悉了，今天来谈谈POST,PUT以及PATCH，在了解这些之前我们先理解一个概念 幂等性:</p>
+<p>幂等性：</p>
+<p>HTTP协议本身是一种面向资源的应用层协议，但对HTTP协议的使用实际上存在着两种不同的方式：</p>
+<p>一种是RESTful的，它把HTTP当成应用层协议，比较忠实地遵守了HTTP协议的各种规定；<br>另一种是SOA的，它并没有完全把HTTP当成应用层协议，而是把HTTP协议作为了传输层协议，然后在HTTP之上建立了自己的应用层协议。<br>GET方法用于获取资源，不应有副作用，所以是幂等的。比如：GET <a target="_blank" rel="noopener" href="http://www.bank.com/account/123456%EF%BC%8C%E4%B8%8D%E4%BC%9A%E6%94%B9%E5%8F%98%E8%B5%84%E6%BA%90%E7%9A%84%E7%8A%B6%E6%80%81%EF%BC%8C%E4%B8%8D%E8%AE%BA%E8%B0%83%E7%94%A8%E4%B8%80%E6%AC%A1%E8%BF%98%E6%98%AFN%E6%AC%A1%E9%83%BD%E6%B2%A1%E6%9C%89%E5%89%AF%E4%BD%9C%E7%94%A8%E3%80%82%E8%AF%B7%E6%B3%A8%E6%84%8F%EF%BC%8C%E8%BF%99%E9%87%8C%E5%BC%BA%E8%B0%83%E7%9A%84%E6%98%AF%E4%B8%80%E6%AC%A1%E5%92%8CN%E6%AC%A1%E5%85%B7%E6%9C%89%E7%9B%B8%E5%90%8C%E7%9A%84%E5%89%AF%E4%BD%9C%E7%94%A8%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E6%AF%8F%E6%AC%A1GET%E7%9A%84%E7%BB%93%E6%9E%9C%E7%9B%B8%E5%90%8C%E3%80%82GET">http://www.bank.com/account/123456，不会改变资源的状态，不论调用一次还是N次都没有副作用。请注意，这里强调的是一次和N次具有相同的副作用，而不是每次GET的结果相同。GET</a> <a target="_blank" rel="noopener" href="http://www.news.com/latest-news%E8%BF%99%E4%B8%AAHTTP%E8%AF%B7%E6%B1%82%E5%8F%AF%E8%83%BD%E4%BC%9A%E6%AF%8F%E6%AC%A1%E5%BE%97%E5%88%B0%E4%B8%8D%E5%90%8C%E7%9A%84%E7%BB%93%E6%9E%9C%EF%BC%8C%E4%BD%86%E5%AE%83%E6%9C%AC%E8%BA%AB%E5%B9%B6%E6%B2%A1%E6%9C%89%E4%BA%A7%E7%94%9F%E4%BB%BB%E4%BD%95%E5%89%AF%E4%BD%9C%E7%94%A8%EF%BC%8C%E5%9B%A0%E8%80%8C%E6%98%AF%E6%BB%A1%E8%B6%B3%E5%B9%82%E7%AD%89%E6%80%A7%E7%9A%84%E3%80%82">http://www.news.com/latest-news这个HTTP请求可能会每次得到不同的结果，但它本身并没有产生任何副作用，因而是满足幂等性的。</a></p>
+<p>DELETE方法用于删除资源，有副作用，但它应该满足幂等性。比如：DELETE <a target="_blank" rel="noopener" href="http://www.forum.com/article/4231%EF%BC%8C%E8%B0%83%E7%94%A8%E4%B8%80%E6%AC%A1%E5%92%8CN%E6%AC%A1%E5%AF%B9%E7%B3%BB%E7%BB%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E5%89%AF%E4%BD%9C%E7%94%A8%E6%98%AF%E7%9B%B8%E5%90%8C%E7%9A%84%EF%BC%8C%E5%8D%B3%E5%88%A0%E6%8E%89id%E4%B8%BA4231%E7%9A%84%E5%B8%96%E5%AD%90%EF%BC%9B%E5%9B%A0%E6%AD%A4%EF%BC%8C%E8%B0%83%E7%94%A8%E8%80%85%E5%8F%AF%E4%BB%A5%E5%A4%9A%E6%AC%A1%E8%B0%83%E7%94%A8%E6%88%96%E5%88%B7%E6%96%B0%E9%A1%B5%E9%9D%A2%E8%80%8C%E4%B8%8D%E5%BF%85%E6%8B%85%E5%BF%83%E5%BC%95%E8%B5%B7%E9%94%99%E8%AF%AF%E3%80%82">http://www.forum.com/article/4231，调用一次和N次对系统产生的副作用是相同的，即删掉id为4231的帖子；因此，调用者可以多次调用或刷新页面而不必担心引起错误。</a></p>
+<p>POST和PUT的区别容易被简单地误认为“POST表示创建资源，PUT表示更新资源.但实际上两者都可以用来创建或是更新数据.单从技术上来说,他们并没有什么区别.但是在HTTP规范中POST是非等幂的,多次调用会产生不同的结果,比如:创建一个用户,由于网络原因或是其他原因多创建了几次,那么将会有多个用户被创建.而PUT id/456则会创建一个id为456的用户,多次调用还是会创建的结果是一样的,所以PUT是等幂的.</p>
+<p>PATCH一般是用来局部更新资源的,假设我们有一个UserInfo，里面有userId， userName， userGender等10个字段。可你的编辑功能因为需求，在某个特别的页面里只能修改userName，这时候的更新怎么做？</p>
+<p>人们通常(为徒省事)把一个包含了修改后userName的完整userInfo对象传给后端，做完整更新。但仔细想想，这种做法感觉有点二，而且真心浪费带宽(纯技术上讲，你不关心带宽那是你土豪)。</p>
+<p>于是PATCH诞生，只传一个userName到指定资源去，表示该请求是一个局部更新，后端仅更新接收到的字段。</p>
+<p>而PUT虽然也是更新资源，但要求前端提供的一定是一个完整的资源对象，理论上说，如果你用了PUT，但却没有提供完整的UserInfo，那么缺了的那些字段应该被清空.另外PUT会有一个create操作,加入更新的id不存在,会进行创建,而PATCH则没有这个.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/01/10/http-request/" data-id="ckjr83kbq0000wsfp9kyydfqq" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Software-Defined-Network-in-Micro" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/11/25/Software-Defined-Network-in-Micro/" class="article-date">
@@ -191,7 +237,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li></ul>
     </div>
   </div>
 
@@ -202,6 +248,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2021/01/10/http-request/">http request</a>
+          </li>
         
           <li>
             <a href="/2020/11/25/Software-Defined-Network-in-Micro/">Software Defined Network in Micro</a>
@@ -223,7 +273,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2020 John Doe<br>
+      &copy; 2021 John Doe<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
